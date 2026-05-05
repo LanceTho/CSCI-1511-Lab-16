@@ -2,14 +2,20 @@
 Lab16_LanceTho-1.py
 Lance Thongsavanh
 Write a program that reads the OHRU.csv file, which contains Ohio's unemployment rate since 1976. You will parse this data and create a time-series line plot using matplotlib.
-Date.
+5/5/2026
 """
+
 from pathlib import Path
 import csv
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-def process_data():
+def process_data() -> tuple:
+    """Processes data from a csv file
+
+    Returns:
+        tuple: a tuple of lists of certain data
+    """
     path = Path("OHUR.csv")
     lines = path.read_text().splitlines()
 
@@ -28,9 +34,12 @@ def process_data():
         else:
             dates.append(date)
             unemp_rates.append(rate)
-    return dates,unemp_rates
+    
+    return dates, unemp_rates
 
-def graph_data():
+def graph_data() -> None:
+    """Graphs the data gathered from calling the process_data() function and saves it as an image
+    """
     dates, unemp_rates = process_data()
 
     figure, graph = plt.subplots()
@@ -43,7 +52,6 @@ def graph_data():
     figure.autofmt_xdate()
 
     plt.savefig("ohio_unemployment.png")
-
 
 if __name__ == "__main__":
     graph_data()
