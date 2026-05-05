@@ -9,48 +9,41 @@ import csv
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-path = Path("OHUR.csv")
-lines = path.read_text().splitlines()
+def process_data():
+    path = Path("OHUR.csv")
+    lines = path.read_text().splitlines()
 
-reader = csv.reader(lines)
-header_row = next(reader)
+    reader = csv.reader(lines)
+    header_row = next(reader)
 
-# for index, col_title in enumerate(header_row):
-#     print(f"{index} {col_title}, ", end=" ")
-# print()
+    dates: list = []
+    unemp_rates: list[float] = []
 
-dates: list = []
-unemp_rates: list[float] = []
+    for row in reader:
+        try:
+            date = datetime.strptime(row[0], "%Y-%m-%d")
+            rate = float(row[1])
+        except ValueError as e:
+            print(date)
+        else:
+            dates.append(date)
+            unemp_rates.append(rate)
+    return dates,unemp_rates
 
-for row in reader:
-    try:
-        date = datetime.strptime(row[0], "%Y-%m-%d")
-        rate = float(row[1])
-    except ValueError as e:
-        print(date)
-    else:
-        dates.append(date)
-        unemp_rates.append(rate)
+def graph_data():
+    dates, unemp_rates = process_data()
 
-figure, graph = plt.subplots()
+    figure, graph = plt.subplots()
 
-graph.plot(dates, unemp_rates, color="blue")
+    graph.plot(dates, unemp_rates, color="blue")
 
-graph.set_title("Ohio Unemployment (by Month): 1976 - 2022")
-graph.set_ylabel("Unemp Rate")
-graph.set_xlabel("Date")
-figure.autofmt_xdate()
+    graph.set_title("Ohio Unemployment (by Month): 1976 - 2022")
+    graph.set_ylabel("Unemp Rate")
+    graph.set_xlabel("Date")
+    figure.autofmt_xdate()
 
-plt.show()
-"""
-Requirements:
-You must import matplotlib.pyplot as plt, csv, and datetime.
-You must use the provided OHUR.csv file.
-Use a try-except block to gracefully handle any data conversion errors.
-Use the csv module to read the file. Use enumerate() to read and analyze the header row.
-Read the dates and unemployment rates into two separate lists.
-You must use the datetime class to convert the date strings from the CSV into datetime objects for plotting.
-The plot must have a title (e.g., "Ohio Unemployment (by Month): 1976 - 2022") and appropriate axis labels ("Date" and "Unemp Rate").
-Your script must save the final plot to an image file (e.g., ohio_unemployment.png).
-The generated plot image must be added to your repository.
-"""
+    plt.savefig("ohio_unemployment.png")
+
+
+if __name__ == "__main__":
+    graph_data()
