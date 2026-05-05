@@ -23,17 +23,22 @@ dates: list = []
 unemp_rates: list[float] = []
 
 for row in reader:
-    date = datetime.strptime(row[0], "%Y-%m-%d")
-    rate = float(row[1])
-    dates.append(date)
-    unemp_rates.append(rate)
+    try:
+        date = datetime.strptime(row[0], "%Y-%m-%d")
+        rate = float(row[1])
+    except ValueError as e:
+        print(date)
+    else:
+        dates.append(date)
+        unemp_rates.append(rate)
 
 figure, graph = plt.subplots()
 
-graph.plot(dates, unemp_rates)
+graph.plot(dates, unemp_rates, color="blue")
 
 graph.set_title("Ohio Unemployment (by Month): 1976 - 2022")
 graph.set_ylabel("Unemp Rate")
+graph.set_xlabel("Date")
 figure.autofmt_xdate()
 
 plt.show()
