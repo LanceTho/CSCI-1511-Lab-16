@@ -7,7 +7,7 @@ Date.
 from pathlib import Path
 import csv
 import matplotlib.pyplot as plt
-import datetime
+from datetime import datetime
 
 path = Path("OHUR.csv")
 lines = path.read_text().splitlines()
@@ -23,14 +23,19 @@ dates: list = []
 unemp_rates: list[float] = []
 
 for row in reader:
-    date = row[0]
+    date = datetime.strptime(row[0], "%Y-%m-%d")
     rate = float(row[1])
     dates.append(date)
     unemp_rates.append(rate)
 
 figure, graph = plt.subplots()
 
-graph.plot(unemp_rates)
+graph.plot(dates, unemp_rates)
+
+graph.set_title("Ohio Unemployment (by Month): 1976 - 2022")
+graph.set_ylabel("Unemp Rate")
+figure.autofmt_xdate()
+
 plt.show()
 """
 Requirements:
